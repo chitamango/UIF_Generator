@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<!-- saved from url=(0061)http://visjs.org/examples/network/nodeStyles/HTMLInNodes.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>UIF Generator</title>
+
+    <style type="text/css">
+        body {
+            font: 10pt arial;
+            background-color: #F0FFF0;
+        }
+        #mynetwork {
+        	
+            width: 100%;
+            height: 450px;
+            border: 1px solid lightgray;
+            background-color:#eeeeee;
+           
+        }
+        
+        #network_area
+        {
+         margin-top: 50px;
+         margin-left: 2.5%;
+         width:67%;
+         float: left;
+        
+        }
+        
+        
+        table, th,td
+        {
+        
+       		border: 1px solid black;
+        
+        }
+        
+        th,td{ 
+        	padding: 5px 5px;
+        	text-align: center;
+            
+        }
+        
+        h2{
+            margin-top: -50px;        
+        	width: 100%;
+            text-align: center;}
+            
+           
+           
+           #table_area{
+              float:left;
+           width:25%;
+           margin-left: 2.5%;
+           margin-top: 50px;
+           
+           }
+           
+           #result_table
+           {
+           
+           width: 100%;
+           }
+
+    </style>
+
+   <script type="text/javascript" src="vis.js"></script>
+    <script type="text/javascript" src="jquery-1.11.3.min.js"></script>
+    <link href="vis.css" rel="stylesheet" type="text/css">
+
+    <script type="text/javascript">
+        var nodes = null;
+        var edges = null;
+        var network = null;
+
+        var DIR = 'img/refresh-cl/';
+        var LENGTH_MAIN = 150;
+        var LENGTH_SUB = 50;
+        
+        var run = 0;
+
+
+     
+
+        // Called when the Visualization API is loaded.
+        function draw() {
+        	
+        	// to calculate time
+        	var i, output = "";
+
+        	// Remember when we started
+        	//var start = new Date().getTime();
+        	
+        	
+            // Create a data table with nodes.
+            nodes = [];
+
+            // Create a data table with links.
+            edges = [];
+            
+            
+            var process_name = $("#process_name").val();
+            var step = $("#step").val();
+            
+            
+          
+            
+        
+            
+            $.getJSON( "UIFGeneratorServlet",{ process: process_name, step: step, date: new Date() } ).done( function( json ) {
+            	
+            	  console.log(json);
+            	  
+            	  // add edges to array
+            	  edges = json.edges;
+            	  
+            	  console.log(edges);
+            	  
+            	  //for each node, we construct the ui
+            	  
+            	  var json_nodes = json.nodes;
+            	  
+            	 // console.log(json_nodes);
+            	  
+            	  	for(var i =0; i < json_nodes.length; i++ )
+            		{
+            		  
+            	  	   var current_json_node = json_nodes[i];
+            	  	   var ui_array = current_json_node.image;
+	                  
+	                   var input= "";
+	                   
+	                   for(var j =0; j < ui_array.length; j++)
+	                   {
+	                	   
+	                	   var current_ui =  ui_array[j];
+	                	   
+	                	   input+= current_ui+'<input type = "text" size="10" /><br/>';
+	                	   
+	                	   
+	                   }   
+	                   
+	                   
+	                   
+	            	   var data = '<svg xmlns="http://www.w3.org/2000/svg" width="390" height="200">' +
+                       '<rect x="0" y="0" width="100%" height="100%" fill="#7890A7" stroke-width="20" stroke="#ffffff" ></rect>' +
+                       '<foreignObject x="15" y="10" width="100%" height="100%">' +
+                       '<div xmlns="http://www.w3.org/1999/xhtml" style="font-size:40px">' +
+                       input +
+                       '</div>' +
+                       '</foreignObject>' +
+                       '</svg>';
+                       
+                       
+                       var DOMURL = window.URL || window.webkitURL || window;
+               	 	
+	                   var img = new Image();
+	                   var svg = new Blob([data], {type: 'image/svg+xml;charset=utf-8'});
+	                   var url = DOMURL.createObjectURL(svg);
+	                   
+	            	   current_json_node.image = url; 
+            	  		
+            		//  console.log(current_json_node);
+            		  
+            		}
+            	  	
+            	  	
+            	  	
+            	  
+            	  	nodes = json_nodes;
+            	  
+            	  	
+            	  	 // create a network
+                    var container = document.getElementById('mynetwork');
+                    var data = {
+                        nodes: nodes,
+                        edges: edges
+                    };
+                    
+                   // console.log(data);
+                    
+                    var options = {
+                        physics: {stabilization: true},
+                        edges: {smooth: false,
+                        	  arrows: {
+                                  to:     {enabled: true, scaleFactor:2}
+                                }
+                 
+                        },
+                      
+                        layout: {
+                            randomSeed: undefined,
+                            improvedLayout:true,
+                            hierarchical: {
+                              enabled:true,
+          
+                              direction: 'UD',   // UD, DU, LR, RL
+                              sortMethod: 'directed' // hubsize, directed
+                            }
+                          },
+                          nodes:{
+                        	  
+                        	  shadow:{
+                        	      enabled: true,
+                        	      size:10,
+                        	      x:5,
+                        	      y:5
+                        	    }
+                        	  
+                          }
+                        
+                      
+                    };
+                    network = new vis.Network(container, data, options);
+            	  	
+                    $("#result").text(json.time + " milliseconds");
+                   	
+                    $("#result_table").append("<tr><td>"+ (++run) +"</td><td>"+step+"</td><td>"+json.time+"</td></tr>" );
+            });
+            
+         	
+            
+            
+       
+           
+        }
+    </script>
+    
+</head>
+
+<body >
+
+<h1>UIF Generator</h1>
+
+<div>
+<label>Process </label> <input type = "text" id = "process_name" /> 
+<label>Step </label> <input type = "text" id = "step" /> 
+<input type = "button" value = "Send Request"  onclick = "draw()"/> <br/>
+</div>
+<p>Current execution duration: <span id = "result"></span></p> 
+
+
+<div id = "table_area">
+<h2>Execution time record</h2>
+<table id = "result_table" >
+<tr><th>run</th><th>step</th><th>execution duration(msec)</th></tr> 
+</table>
+</div>
+
+<div id = "network_area"> <h2>Result Process and Ui</h2> <div id="mynetwork"><div class="vis-network" tabindex="900" style="position: relative; overflow: hidden; touch-action: none; -webkit-user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); width: 100%; height: 100%;"><canvas width="100%" height="450" style="position: relative; touch-action: none; -webkit-user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); width: 100%; height: 100%;"></canvas></div></div></div>
+
+
+</body></html>
