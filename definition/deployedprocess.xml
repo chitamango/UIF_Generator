@@ -2,7 +2,7 @@
 <registeredProcess>
 	<process>
 		<name>order_process_50_rules</name>
-		<location>definition/orderprocess.xml</location>
+		<location>order_process_50_rules.xml</location>
 	</process>
 	<process>
 		<name>order_process_10_rules</name>
@@ -10,22 +10,22 @@
 	</process>
 	<process>
 		<name>order_process_100_rules</name>
-		<location>definition/orderprocess3.xml</location>
+		<location>definition/order_process_100_rules.xml</location>
 	</process>
 	<process>
 		<name>order_process_200_rules</name>
-		<location>definition/orderprocess4.xml</location>
+		<location>definition/order_process_200_rules.xml</location>
 	</process>
 	<process>
 		<name>order_process_500_rules</name>
-		<location>definition/orderprocess5.xml</location>
+		<location>definition/order_process_500_rules.xml</location>
 	</process>
 	<process>
 		<name>order_process_1000_rules</name>
-		<location>definition/orderprocess6.xml</location>
+		<location>definition/order_process_1000_rules.xml</location>
 	</process>
 	<process>
 		<name>order_process_2000_rules</name>
-		<location>definition/orderprocess7.xml</location>
+		<location>definition/order_process_2000_rules.xml</location>
 	</process>
 </registeredProcess>

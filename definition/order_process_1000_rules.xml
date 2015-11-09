@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><process xmlns="http://www.swin.edu.au" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="order_process_100_rules" xsi:schemaLocation="http://www.swin.edu.au ACPdefintion.xsd">
+<?xml version="1.0" encoding="UTF-8"?><process xmlns="http://www.swin.edu.au" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="order_process_1000_rules" xsi:schemaLocation="http://www.swin.edu.au ACPdefintion.xsd">
 	<services>
 		<service inputMessage="createOrderRequest" location="http://localhost:8080/axis2/services/createOrderService?wsdl" name="createOrderService" namespace="http://creatOrder.test" operation="createOrder" outputMessage="createOrderResponse" port="createOrderServiceHttpSoap11Endpoint" />
 		<service inputMessage="calculateGrandTotalRequest" location="http://localhost:8080/axis2/services/GrandTotalService?wsdl" name="GrandTotalService" namespace="http://GrandTotal.test" operation="calculateGrandTotal" outputMessage="calculateGrandTotalResponse" port="GrandTotalServiceHttpSoap11Endpoint"/> <!-- //input message here should be message type of wsdl -->
