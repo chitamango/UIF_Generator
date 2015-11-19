@@ -28,4 +28,8 @@
 		<name>order_process_2000_rules</name>
 		<location>definition/order_process_2000_rules.xml</location>
 	</process>
+	<process>
+		<name>order_process_5000_rules</name>
+		<location>definition/order_process_5000_rules.xml</location>
+	</process>
 </registeredProcess>
